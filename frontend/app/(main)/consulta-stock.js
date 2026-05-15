@@ -111,7 +111,7 @@ export default function ConsultaStockScreen() {
     <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.scroll}>
       <PageHeader
         title="Consulta y Control de Stock"
-        subtitle="Monitoreo en tiempo real del inventario"
+        subtitle="Consulta del stock disponible"
         right={
           <OutlineButton
             title="Exportar"

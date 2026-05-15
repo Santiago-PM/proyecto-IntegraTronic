@@ -45,9 +45,7 @@ export default function VentaFisicaScreen() {
 
   const subtotal = cart.reduce((s, l) => s + l.precio * l.cantidad, 0);
   const desc = parseFloat(String(descuento).replace(",", ".")) || 0;
-  const base = Math.max(0, subtotal - desc);
-  const iva = base * 0.21;
-  const total = base + iva;
+  const total = Math.max(0, subtotal - desc);
 
   const processSale = async () => {
     if (!user?.id) return showAlert("Sesión", "Inicia sesión de nuevo.");
@@ -110,8 +108,6 @@ export default function VentaFisicaScreen() {
           <Text style={styles.cardTitle}>Resumen de Venta</Text>
           <Row k="Subtotal" v={formatMoney(subtotal)} />
           <Row k="Descuento" v={formatMoney(desc)} />
-          <Row k="Base Imponible" v={formatMoney(base)} />
-          <Row k="IVA (21%)" v={formatMoney(iva)} />
           <Row k="Total" v={formatMoney(total)} bold />
           <PrimaryButton
             title={processing ? "Procesando..." : "Procesar Venta"}
