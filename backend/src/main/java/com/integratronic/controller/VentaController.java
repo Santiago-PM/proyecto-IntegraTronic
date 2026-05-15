@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.integratronic.dto.RegistrarVentaRequestDTO;
 import com.integratronic.dto.VentaRequestDTO;
 import com.integratronic.dto.VentaResponseDTO;
 import com.integratronic.model.Usuario;
@@ -37,6 +38,16 @@ public class VentaController {
                 .map(this::convertirAResponseDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/registrar")
+    public ResponseEntity<VentaResponseDTO> registrarVenta(@RequestBody RegistrarVentaRequestDTO request) {
+        try {
+            Venta ventaGuardada = ventaService.registrarVenta(request);
+            return ResponseEntity.ok(convertirAResponseDTO(ventaGuardada));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PostMapping

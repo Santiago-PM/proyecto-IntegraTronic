@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.integratronic.dto.PagoOnlineRequestDTO;
 import com.integratronic.dto.PagoOnlineResponseDTO;
+import com.integratronic.dto.RegistrarPagoOnlineRequestDTO;
 import com.integratronic.model.PagoOnline;
 import com.integratronic.model.PedidoOnline;
 import com.integratronic.service.PagoOnlineService;
@@ -37,6 +38,17 @@ public class PagoOnlineController {
                 .map(this::convertirAResponseDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/registrar")
+    public ResponseEntity<PagoOnlineResponseDTO> registrarPagoOnline(
+            @RequestBody RegistrarPagoOnlineRequestDTO request) {
+        try {
+            PagoOnline pagoGuardado = pagoOnlineService.registrarPagoOnline(request);
+            return ResponseEntity.ok(convertirAResponseDTO(pagoGuardado));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PostMapping
