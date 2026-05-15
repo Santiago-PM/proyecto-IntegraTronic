@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "IntegraTonic",
+    "slug": "integratonic-front",
+    "version": "1.0.0",
+    "orientation": "default",
+    "scheme": "integratonic",
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": ["**/*"],
+    "ios": { "supportsTablet": true },
+    "android": { "adaptiveIcon": { "backgroundColor": "#2D68E2" } },
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    },
+    "plugins": ["expo-router"],
+    "extra": {
+      "apiUrl": "http://localhost:8080"
+    }
+  }
+}

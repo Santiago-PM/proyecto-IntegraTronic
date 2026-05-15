@@ -1,14 +1,32 @@
-# Frontend
+# IntegraTonic — Frontend (Expo / React Native Web)
 
-Esta carpeta contendrá el frontend de IntegraTronic.
+App ERP con Expo Router. Se comunica con el backend Spring Boot en `http://localhost:8080`.
 
-## Tecnología prevista
+## Requisitos
 
-- React.
-- Comunicación con el backend mediante API REST.
+- Node.js LTS (20+)
+- Backend en marcha (ver `../iniciar-backend.ps1` o Docker en la raíz del repo)
 
-## Alcance previsto
+## Arrancar en desarrollo
 
-El frontend permitirá utilizar las funcionalidades principales del ERP: gestión de usuarios y roles, productos, familias de productos, stock, ventas físicas, clientes, pedidos online, pago online gestionado mediante sistema externo e informes básicos.
+```bash
+cd frontend
+npm install
+npm run web
+```
 
-Todavía no se ha creado el proyecto React ni se han fijado versiones definitivas.
+Abre la URL que indique Expo (p. ej. `http://localhost:8081`).
+
+## Login de prueba (datos demo con Docker)
+
+- Usuario: `demo@integratronic.com`
+- Contraseña: `demo123`
+
+## Scripts
+
+| Comando | Descripción |
+|---------|-------------|
+| `npm run web` | Desarrollo web |
+| `npm run export:web` | Build estático en `dist/` |
+
+La URL del API se configura en `app.json` → `extra.apiUrl`.
