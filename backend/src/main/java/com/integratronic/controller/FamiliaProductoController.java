@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.integratronic.dto.FamiliaProductoRequestDTO;
+import com.integratronic.dto.FamiliaProductoResponseDTO;
 import com.integratronic.model.FamiliaProducto;
 import com.integratronic.service.FamiliaProductoService;
 
@@ -19,33 +21,39 @@ public class FamiliaProductoController {
     }
 
     @GetMapping
-    public List<FamiliaProducto> listar() {
-        return familiaProductoService.listar();
+    public List<FamiliaProductoResponseDTO> listar() {
+        return familiaProductoService.listar().stream()
+                .map(this::convertirAResponseDTO)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FamiliaProducto> buscarPorId(@PathVariable Integer id) {
+    public ResponseEntity<FamiliaProductoResponseDTO> buscarPorId(@PathVariable Integer id) {
         return familiaProductoService.buscarPorId(id)
+                .map(this::convertirAResponseDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<FamiliaProducto> guardar(@RequestBody FamiliaProducto familiaProducto) {
+    public ResponseEntity<FamiliaProductoResponseDTO> guardar(
+            @RequestBody FamiliaProductoRequestDTO familiaProductoRequestDTO) {
+        FamiliaProducto familiaProducto = convertirAEntidad(familiaProductoRequestDTO);
         FamiliaProducto familiaGuardada = familiaProductoService.guardar(familiaProducto);
-        return ResponseEntity.ok(familiaGuardada);
+        return ResponseEntity.ok(convertirAResponseDTO(familiaGuardada));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<FamiliaProducto> actualizar(@PathVariable Integer id,
-            @RequestBody FamiliaProducto familiaProducto) {
+    public ResponseEntity<FamiliaProductoResponseDTO> actualizar(@PathVariable Integer id,
+            @RequestBody FamiliaProductoRequestDTO familiaProductoRequestDTO) {
         if (familiaProductoService.buscarPorId(id).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
+        FamiliaProducto familiaProducto = convertirAEntidad(familiaProductoRequestDTO);
         familiaProducto.setIdFamilia(id);
         FamiliaProducto familiaActualizada = familiaProductoService.guardar(familiaProducto);
-        return ResponseEntity.ok(familiaActualizada);
+        return ResponseEntity.ok(convertirAResponseDTO(familiaActualizada));
     }
 
     @DeleteMapping("/{id}")
@@ -56,5 +64,18 @@ public class FamiliaProductoController {
 
         familiaProductoService.eliminar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    private FamiliaProductoResponseDTO convertirAResponseDTO(FamiliaProducto familiaProducto) {
+        return new FamiliaProductoResponseDTO(
+                familiaProducto.getIdFamilia(),
+                familiaProducto.getNombre(),
+                familiaProducto.getDescripcion());
+    }
+
+    private FamiliaProducto convertirAEntidad(FamiliaProductoRequestDTO familiaProductoRequestDTO) {
+        return new FamiliaProducto(
+                familiaProductoRequestDTO.getNombre(),
+                familiaProductoRequestDTO.getDescripcion());
     }
 }
