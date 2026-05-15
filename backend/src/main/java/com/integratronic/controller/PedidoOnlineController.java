@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.integratronic.dto.PedidoOnlineRequestDTO;
 import com.integratronic.dto.PedidoOnlineResponseDTO;
+import com.integratronic.dto.RegistrarPedidoOnlineRequestDTO;
 import com.integratronic.model.Cliente;
 import com.integratronic.model.PedidoOnline;
 import com.integratronic.service.ClienteService;
@@ -37,6 +38,17 @@ public class PedidoOnlineController {
                 .map(this::convertirAResponseDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/registrar")
+    public ResponseEntity<PedidoOnlineResponseDTO> registrarPedidoOnline(
+            @RequestBody RegistrarPedidoOnlineRequestDTO request) {
+        try {
+            PedidoOnline pedidoGuardado = pedidoOnlineService.registrarPedidoOnline(request);
+            return ResponseEntity.ok(convertirAResponseDTO(pedidoGuardado));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PostMapping
